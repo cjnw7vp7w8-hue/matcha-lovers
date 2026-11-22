@@ -175,7 +175,14 @@ footer .slogan{font:600 28px/1.1 var(--display);color:var(--on-deep)}
 }
 .scrub{margin:4px auto 0;max-width:760px;width:100%}
 .scrub-label{display:block;font-weight:700;color:var(--muted);font-size:14px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
-.scrub input[type=range]{width:100%;height:44px;accent-color:var(--leaf);cursor:grab}
+.scrub input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:44px;background:transparent;cursor:grab;touch-action:pan-y;margin:0}
+.scrub input[type=range]::-webkit-slider-runnable-track{height:10px;border-radius:99px;background:linear-gradient(90deg,var(--leaf) 0 var(--v,0%),var(--line) var(--v,0%) 100%)}
+.scrub input[type=range]::-moz-range-track{height:10px;border-radius:99px;background:var(--line)}
+.scrub input[type=range]::-moz-range-progress{height:10px;border-radius:99px;background:var(--leaf)}
+.scrub input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;margin-top:-10px;border-radius:50%;background:var(--surface);border:3px solid var(--deep);box-shadow:0 2px 10px rgba(0,0,0,.18);transition:transform .15s}
+.scrub input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:var(--surface);border:3px solid var(--deep);box-shadow:0 2px 10px rgba(0,0,0,.18)}
+.scrub input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
+.scrub input[type=range]:focus-visible{outline:3px solid var(--leaf);outline-offset:4px;border-radius:99px}
 .scrub input[type=range]:active{cursor:grabbing}
 .scrub-ends{display:flex;justify-content:space-between;color:var(--muted);font-size:14px}
 @media (max-width:860px){
@@ -269,18 +276,18 @@ footer .slogan{font:600 28px/1.1 var(--display);color:var(--on-deep)}
     <div class="wrap">
       <p class="eyebrow">Inside the cup</p>
       <h2>Watch it come to life</h2>
-      <p class="intro">Drag the bar under the cup, or tap a step. The cup turns in 3D while you follow every step, from the dough to the first bite.</p>
+      <p class="intro">Drag the slider, in either direction, or tap a step. You control the 3D model itself as it takes shape: from a ball of raw dough to a baked cup, filled with matcha, then bitten.</p>
       <div class="viewer">
         <div class="stepper" id="stepper" aria-label="Five steps, from the dough to the first bite">
           <div class="stepper-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="stepBar"><div class="stepper-fill" id="stepFill"></div></div>
           <ol id="steps3d">
-            <li data-at="0"><button type="button" aria-label="Step 1: Buckwheat and seaweed dough">1</button><b>Dough</b><span hidden>Breton buckwheat flour and Brittany seaweed are shaped into a cup.</span><i hidden>Buckwheat & seaweed dough</i></li>
-            <li data-at="0.30"><button type="button" aria-label="Step 2: Baked until crunchy">2</button><b>Baked</b><span hidden>The cup bakes from base to rim and turns golden.</span><i hidden>Baked until crunchy</i></li>
-            <li data-at="0.50"><button type="button" aria-label="Step 3: Crunch-Lock coating">3</button><b>Crunch-Lock</b><span hidden>A thin natural plant layer keeps it crisp for 4 hours.</span><i hidden>Crunch-Lock coating</i></li>
-            <li data-at="0.65"><button type="button" aria-label="Step 4: Matcha latte poured">4</button><b>Latte poured</b><span hidden>Hot or iced, with a latte-art heart on top.</span><i hidden>Matcha latte poured</i></li>
-            <li data-at="0.88"><button type="button" aria-label="Step 5: The first bite">5</button><b>First bite</b><span hidden>Sip it, bite it, love it. Nothing goes in the bin.</span><i hidden>The first bite</i></li>
+            <li data-at="0"><button type="button" aria-label="Step 1: Raw dough">1</button><b>Dough</b><span hidden>A ball of buckwheat shortbread dough, before it becomes a cup.</span><i hidden>Raw dough</i></li>
+            <li data-at="0.10"><button type="button" aria-label="Step 2: Base and walls take shape">2</button><b>Shaping</b><span hidden>Pressed into a mould: the base forms, then the walls rise and the cup turns hollow.</span><i hidden>Base and walls take shape</i></li>
+            <li data-at="0.50"><button type="button" aria-label="Step 3: Refined, then baked">3</button><b>Baking</b><span hidden>The rim is rounded, then the cup bakes until golden, crisp and lightly porous.</span><i hidden>Refined, then baked until golden</i></li>
+            <li data-at="0.77"><button type="button" aria-label="Step 4: Matcha latte poured">4</button><b>Matcha</b><span hidden>Hot or iced, the matcha latte goes straight into the biscuit.</span><i hidden>Matcha latte poured</i></li>
+            <li data-at="0.93"><button type="button" aria-label="Step 5: The first bite">5</button><b>First bite</b><span hidden>Sip it, bite it, love it. Nothing left to throw away.</span><i hidden>The first bite</i></li>
           </ol>
-          <div class="step-detail" aria-live="polite"><p id="stepText"><strong>Buckwheat & seaweed dough</strong>Breton buckwheat flour and Brittany seaweed are shaped into a cup.</p></div>
+          <div class="step-detail" aria-live="polite"><p id="stepText"><strong>Raw dough</strong>A ball of buckwheat shortbread dough, before it becomes a cup.</p></div>
         </div>
         <div class="viewer-stage" id="viewerStage">
           <canvas id="cup3d" aria-label="3D model of the Matcha Lovers cup"></canvas>
@@ -288,9 +295,9 @@ footer .slogan{font:600 28px/1.1 var(--display);color:var(--on-deep)}
         </div>
       </div>
       <div class="scrub">
-        <label for="scrub" class="scrub-label">Drag to build and turn the cup</label>
+        <label for="scrub" class="scrub-label">Drag to shape the cup</label>
         <input type="range" id="scrub" min="0" max="1000" value="0" step="1">
-        <div class="scrub-ends"><span>Dough</span><span>First bite</span></div>
+        <div class="scrub-ends"><span>Raw dough · 0%</span><span>First bite · 100%</span></div>
       </div>
     </div>
   </section>
