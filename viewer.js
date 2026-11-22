@@ -8,6 +8,11 @@ const canvas = document.getElementById('cup3d');
 const stage = document.getElementById('viewerStage');
 const scrub = document.getElementById('scrub');
 const steps = [...document.querySelectorAll('#steps3d li')];
+const fill = document.getElementById('stepFill');
+const bar = document.getElementById('stepBar');
+const stepText = document.getElementById('stepText');
+const AT = steps.map(li => +li.dataset.at);
+let shown = -1;
 const loading = document.getElementById('viewerLoading');
 
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
@@ -77,7 +82,7 @@ const smooth = (a, b, x) => { const t = Math.min(Math.max((x - a) / (b - a), 0),
 let p = 0, biteTime = -1, wasBitten = false, idle = 0;
 
 function update() {
-  if (!whole) return;
+  if (!whole) { syncSteps(); return; }
   // 1) turn: a full circle that ends with the bite facing you
   pivot.rotation.y = -Math.PI * 2 * (1 - p) * 0.9;
   // 2) bake from base to rim
@@ -86,19 +91,49 @@ function update() {
   // 3) matcha poured
   const pour = smooth(0.62, 0.84, p);
   [latteW, latteB].forEach(l => { if (!l) return; l.visible = pour > 0.001; l.position.y = 0.12 + (latteY - 0.12) * pour;
-    const s = (0.6 + 0.13 * l.position.y - 0.056) / (0.6 + 0.13 * latteY - 0.056); l.scale.set(s, 1, s); });
+    if (l.userData.s0 === undefined) l.userData.s0 = l.scale.x;
+    const s = l.userData.s0 * (0.525 + 0.125 * l.position.y) / (0.525 + 0.125 * latteY); l.scale.set(s, l.scale.y, s); });
   // 4) bite
   const isBitten = p >= 0.88;
   whole.visible = !isBitten; bitten.visible = isBitten;
   if (isBitten && !wasBitten) biteTime = performance.now();
   if (!isBitten) crumbs.forEach(c => c.visible = false);
   wasBitten = isBitten;
-  steps.forEach((li, i) => {
-    const at = +li.dataset.at, next = i + 1 < steps.length ? +steps[i + 1].dataset.at : 2;
-    li.classList.toggle('active', p >= at && p < next);
-    li.classList.toggle('done', p >= next);
-  });
+  syncSteps();
 }
+
+// The bar fills piecewise so it reaches point N exactly when step N becomes active.
+function syncSteps() {
+  let cur = 0;
+  for (let i = 0; i < AT.length; i++) if (p >= AT[i] - 1e-6) cur = i;
+  const last = AT.length - 1;
+  const seg = cur < last ? (p - AT[cur]) / (AT[cur + 1] - AT[cur]) : 0;
+  const f = Math.min(1, (cur + Math.max(0, Math.min(1, seg))) / last);
+  fill.style.transform = `scaleX(${f})`;
+  bar.setAttribute('aria-valuenow', Math.round(f * 100));
+  steps.forEach((li, i) => { li.classList.toggle('active', i === cur); li.classList.toggle('done', i < cur); });
+  if (cur !== shown) {
+    shown = cur;
+    const li = steps[cur];
+    stepText.style.opacity = 0;
+    setTimeout(() => { stepText.innerHTML = `<strong>${li.querySelector('i').textContent}</strong>${li.querySelector('span').textContent}`; stepText.style.opacity = 1; }, 120);
+  }
+}
+
+// Tap a point: the cup glides there (and the slider follows) instead of jumping.
+let tween = null;
+function glideTo(target) {
+  const from = p, t0 = performance.now(), dur = 650;
+  cancelAnimationFrame(tween);
+  const tick = now => {
+    const k = Math.min(1, (now - t0) / dur), e = k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+    p = from + (target - from) * e; scrub.value = Math.round(p * 1000); update();
+    if (k < 1) tween = requestAnimationFrame(tick);
+  };
+  tween = requestAnimationFrame(tick);
+}
+steps.forEach((li, i) => li.querySelector('button').addEventListener('click', () => glideTo(i === AT.length - 1 ? 1 : AT[i] + 0.0001)));
+syncSteps();
 
 function resize() {
   const r = stage.getBoundingClientRect();
@@ -107,7 +142,7 @@ function resize() {
 }
 new ResizeObserver(resize).observe(stage); resize();
 
-scrub.addEventListener('input', () => { p = scrub.value / 1000; idle = 0; update(); });
+scrub.addEventListener('input', () => { cancelAnimationFrame(tween); p = scrub.value / 1000; idle = 0; update(); });
 
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 function loop(now) {
