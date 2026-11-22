@@ -143,7 +143,29 @@ footer{background:var(--deep);color:var(--on-deep-muted);padding-block:48px;marg
 footer .row{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
 footer .slogan{font:600 28px/1.1 var(--display);color:var(--on-deep)}
 
+
+/* 3D VIEWER */
+.viewer{display:grid;grid-template-columns:1.25fr .75fr;gap:36px;align-items:center;margin-top:36px}
+.viewer-stage{position:relative;aspect-ratio:5/4;max-width:100%;border-radius:32px;overflow:hidden;min-width:0;
+  background:radial-gradient(120% 90% at 50% 30%, var(--surface) 0%, var(--bg) 70%);border:1px solid var(--line)}
+.viewer-stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.viewer-loading{position:absolute;inset:auto 0 18px 0;text-align:center;color:var(--muted);font-size:15px}
+.steps3d{list-style:none;margin:0;padding:0;display:grid;gap:10px;counter-reset:s}
+.steps3d li{counter-increment:s;display:grid;grid-template-columns:34px 1fr;column-gap:12px;padding:12px 14px;border-radius:16px;transition:background .25s,opacity .25s;opacity:.55}
+.steps3d li::before{content:counter(s);grid-row:span 2;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font:600 15px var(--display);background:var(--line);color:var(--ink)}
+.steps3d li b{font:600 18px/1.25 var(--display)}
+.steps3d li span{color:var(--muted);font-size:15px;line-height:1.45}
+.steps3d li.done{opacity:.8}
+.steps3d li.done::before{background:var(--matcha);color:#16301F}
+.steps3d li.active{opacity:1;background:var(--surface);box-shadow:0 1px 0 var(--line)}
+.steps3d li.active::before{background:var(--deep);color:var(--on-deep)}
+.scrub{margin-top:26px;max-width:760px}
+.scrub-label{display:block;font-weight:700;color:var(--muted);font-size:14px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+.scrub input[type=range]{width:100%;height:44px;accent-color:var(--leaf);cursor:grab}
+.scrub input[type=range]:active{cursor:grabbing}
+.scrub-ends{display:flex;justify-content:space-between;color:var(--muted);font-size:14px}
 @media (max-width:860px){
+  .viewer{grid-template-columns:1fr}
   .hero-grid,.flav,.calc{grid-template-columns:1fr}
   .how-grid,.ingredients,.biz{grid-template-columns:1fr}
   .inno{grid-template-columns:1fr}
@@ -230,6 +252,33 @@ footer .slogan{font:600 28px/1.1 var(--display);color:var(--on-deep)}
     </div>
   </section>
 
+  <section id="inside" class="inside" style="padding-top:0">
+    <div class="wrap">
+      <p class="eyebrow">Inside the cup</p>
+      <h2>Watch it come to life</h2>
+      <p class="intro">Drag the bar under the cup. It turns in 3D while you follow every step, from the dough to the first bite.</p>
+      <div class="viewer">
+        <div class="viewer-stage" id="viewerStage">
+          <canvas id="cup3d" aria-label="3D model of the Matcha Lovers cup"></canvas>
+          <p class="viewer-loading" id="viewerLoading">Loading the 3D cup…</p>
+        </div>
+        <div class="viewer-side">
+          <ol class="steps3d" id="steps3d">
+            <li data-at="0"><b>Buckwheat & seaweed dough</b><span>Breton buckwheat flour and Brittany seaweed are shaped into a cup.</span></li>
+            <li data-at="0.30"><b>Baked until crunchy</b><span>The cup bakes from base to rim and turns golden.</span></li>
+            <li data-at="0.50"><b>Crunch-Lock coating</b><span>A thin natural plant layer keeps it crisp for 4 hours.</span></li>
+            <li data-at="0.65"><b>Matcha latte poured</b><span>Hot or iced, with a latte-art heart on top.</span></li>
+            <li data-at="0.88"><b>The first bite</b><span>Sip it, bite it, love it. Nothing goes in the bin.</span></li>
+          </ol>
+        </div>
+      </div>
+      <div class="scrub">
+        <label for="scrub" class="scrub-label">Drag to build and turn the cup</label>
+        <input type="range" id="scrub" min="0" max="1000" value="0" step="1">
+        <div class="scrub-ends"><span>Dough</span><span>First bite</span></div>
+      </div>
+    </div>
+  </section>
   <section id="flavours" style="padding-top:0">
     <div class="wrap">
       <p class="eyebrow">Flavours</p>
@@ -393,5 +442,7 @@ footer .slogan{font:600 28px/1.1 var(--display);color:var(--on-deep)}
 })();
 </script>
 
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module" src="viewer.js"></script>
 </body>
 </html>
