@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Matcha Lovers: the edible matcha cup, baked in Nantes. A student Dragons' Den project.">
+<title>Matcha Lovers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,800&display=swap">
+<style>
+/* Layout: a green hero with a cup you can bite, then alternating bands that each answer one question a customer asks. */
+:root{
+  --bg:#F3F6EC; --surface:#FFFFFF; --ink:#16301F; --muted:#4A5E4F; --line:#D5DFC9;
+  --deep:#1F3B2D; --matcha:#8DB33A; --leaf:#5E7F2A; --cream:#F6F1E4; --biscuit:#E6D9B8;
+  --on-deep:#F6F1E4; --on-deep-muted:#C3D3BF;
+  --display:'Fredoka', 'Arial Rounded MT Bold', Arial, sans-serif;
+  --body:'Nunito Sans', Arial, sans-serif;
+  --r:22px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#101C15; --surface:#18281F; --ink:#EAF0E2; --muted:#AFC0AC; --line:#2B4234;
+  --deep:#0B1510; --matcha:#A9CC5A; --leaf:#A9CC5A; --on-deep:#F6F1E4; --on-deep-muted:#AFC0AC; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#101C15; --surface:#18281F; --ink:#EAF0E2; --muted:#AFC0AC; --line:#2B4234;
+  --deep:#0B1510; --matcha:#A9CC5A; --leaf:#A9CC5A; --on-deep:#F6F1E4; --on-deep-muted:#AFC0AC; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.6 var(--body)}
+h1,h2,h3{font-family:var(--display);font-weight:600;line-height:1.05;margin:0;text-wrap:balance}
+p{margin:0}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.eyebrow{font:800 13px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--leaf)}
+section{padding-block:88px}
+.btn{display:inline-flex;align-items:center;gap:10px;font:600 17px/1 var(--display);padding:16px 26px;border-radius:999px;border:0;cursor:pointer;text-decoration:none;transition:transform .15s ease, background .2s}
+.btn:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid var(--matcha);outline-offset:3px}
+.btn:active{transform:scale(.97)}
+
+/* HERO */
+.hero{background:var(--deep);color:var(--on-deep);margin-top:calc(-1 * env(safe-area-inset-top,0px));padding-top:calc(env(safe-area-inset-top,0px) + 28px);padding-bottom:72px;overflow:hidden}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font:600 22px/1 var(--display)}
+.nav a.link{color:var(--on-deep-muted);text-decoration:none;font-weight:600;font-size:15px}
+.nav a.link:hover{color:var(--on-deep)}
+.navlinks{display:flex;gap:22px;flex-wrap:wrap}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;margin-top:56px}
+.hero h1{font-size:clamp(48px,8vw,104px);letter-spacing:-.02em}
+.hero h1 em{font-style:normal;color:#A9CC5A}
+.hero .lead{font-size:20px;color:var(--on-deep-muted);max-width:30ch;margin-top:22px}
+.hero .actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:34px}
+.btn.primary{background:#A9CC5A;color:#16301F}
+.btn.primary:hover{background:#BEDB78}
+.btn.ghost{background:transparent;color:var(--on-deep);box-shadow:inset 0 0 0 2px #3E5C49}
+.btn.ghost:hover{box-shadow:inset 0 0 0 2px #A9CC5A}
+.cup-stage{position:relative;display:grid;place-items:center;min-width:0}
+.cup-stage svg{width:100%;max-width:440px;height:auto;overflow:visible}
+.bite-hint{font:500 15px/1.3 var(--display);color:var(--on-deep-muted);text-align:center;margin-top:8px}
+#biteMark{transform-origin:414px 140px;transform:scale(0);transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+.bitten #biteMark{transform:scale(1)}
+.crumb{opacity:0;transform:translate(0,0)}
+.bitten .crumb{animation:crumb .9s ease-out forwards}
+@keyframes crumb{0%{opacity:1;transform:translate(0,0)}100%{opacity:0;transform:translate(var(--dx),var(--dy))}}
+.cup-body{transition:transform .2s}
+.cup-stage button{all:unset;cursor:pointer;display:block;border-radius:24px}
+.cup-stage button:hover .cup-body{transform:rotate(-2deg)}
+.crunch{position:absolute;top:8%;right:4%;font:700 34px/1 var(--display);color:#A9CC5A;opacity:0;transform:rotate(8deg) scale(.6)}
+.bitten .crunch{animation:pop .8s ease-out forwards}
+@keyframes pop{0%{opacity:0;transform:rotate(8deg) scale(.6)}30%{opacity:1;transform:rotate(8deg) scale(1.1)}100%{opacity:0;transform:rotate(8deg) scale(1)}}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:64px}
+.stat{border-top:1px solid #3E5C49;padding-top:16px}
+.stat b{display:block;font:600 36px/1 var(--display);color:var(--on-deep)}
+.stat span{color:var(--on-deep-muted);font-size:15px}
+
+/* HOW */
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:28px;display:flex;flex-direction:column;gap:10px}
+.step .verb{font:600 44px/1 var(--display);color:var(--leaf)}
+.step p{color:var(--muted)}
+h2{font-size:clamp(34px,5vw,56px);margin-top:12px}
+.intro{max-width:60ch;color:var(--muted);margin-top:16px;font-size:18px}
+
+/* FLAVOURS */
+.flav{display:grid;grid-template-columns:.9fr 1.1fr;gap:48px;align-items:center;margin-top:40px}
+.flav-cup{background:var(--surface);border:1px solid var(--line);border-radius:32px;display:grid;place-items:center;padding:32px;min-width:0}
+.flav-cup svg{width:100%;max-width:300px;height:auto}
+.flav-cup .fill{transition:fill .4s ease}
+.tabs{display:flex;gap:10px;flex-wrap:wrap}
+.tab{font:600 16px/1 var(--display);padding:12px 20px;border-radius:999px;border:2px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+.tab[aria-pressed="true"]{background:var(--deep);border-color:var(--deep);color:var(--on-deep)}
+.flav-name{font:600 40px/1.05 var(--display);margin-top:28px}
+.flav-desc{color:var(--muted);margin-top:12px;max-width:44ch;font-size:18px}
+.pairing{margin-top:18px;font-size:15px;color:var(--muted)}
+.pairing b{color:var(--ink)}
+
+/* REGION */
+.region{background:var(--surface);border-block:1px solid var(--line)}
+.ingredients{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px}
+.ing{display:flex;flex-direction:column;gap:10px}
+.ing .dot{width:56px;height:56px;border-radius:50%;display:grid;place-items:center}
+.ing h3{font-size:24px}
+.ing p{color:var(--muted)}
+
+/* INNOVATION */
+.inno{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:40px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:28px;display:flex;gap:18px;align-items:flex-start}
+.card .ico{flex:none;width:52px;height:52px;border-radius:16px;background:var(--bg);display:grid;place-items:center;color:var(--leaf)}
+.card h3{font-size:22px}
+.card p{color:var(--muted);margin-top:6px}
+
+/* CALC */
+.calc{background:var(--deep);color:var(--on-deep);border-radius:32px;padding:48px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.calc h2{color:var(--on-deep)}
+.calc .eyebrow{color:#A9CC5A}
+.calc label{display:block;font-weight:600;margin-top:26px;color:var(--on-deep-muted)}
+.calc input[type=range]{width:100%;margin-top:14px;accent-color:#A9CC5A}
+.calc-out{display:grid;gap:18px}
+.big{font:600 clamp(56px,9vw,96px)/1 var(--display);color:#A9CC5A;font-variant-numeric:tabular-nums}
+.calc-out p{color:var(--on-deep-muted)}
+.calc-out strong{color:var(--on-deep)}
+
+/* BUSINESS */
+.biz{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px}
+.price{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:28px}
+.price b{display:block;font:600 52px/1 var(--display);font-variant-numeric:tabular-nums}
+.price span{color:var(--muted)}
+.price.hl{background:var(--deep);border-color:var(--deep);color:var(--on-deep)}
+.price.hl b{color:#A9CC5A}
+.price.hl span{color:var(--on-deep-muted)}
+
+/* FAQ */
+.faq{max-width:760px;margin-top:32px;display:grid;gap:12px}
+details{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:0 24px}
+summary{cursor:pointer;list-style:none;font:600 19px/1.3 var(--display);padding:20px 0;display:flex;justify-content:space-between;gap:16px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--leaf);font-size:26px;line-height:.9;transition:transform .2s}
+details[open] summary::after{transform:rotate(45deg)}
+details p{color:var(--muted);padding-bottom:20px}
+
+/* TEAM / FOOTER */
+.team{display:flex;gap:16px;flex-wrap:wrap;margin-top:28px}
+.member{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:8px 20px 8px 8px;font-weight:600}
+.member i{width:40px;height:40px;border-radius:50%;background:var(--matcha);color:#16301F;display:grid;place-items:center;font:600 17px var(--display);font-style:normal}
+footer{background:var(--deep);color:var(--on-deep-muted);padding-block:48px;margin-top:88px;font-size:15px}
+footer .row{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+footer .slogan{font:600 28px/1.1 var(--display);color:var(--on-deep)}
+
+@media (max-width:860px){
+  .hero-grid,.flav,.calc{grid-template-columns:1fr}
+  .how-grid,.ingredients,.biz{grid-template-columns:1fr}
+  .inno{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr}
+  .calc{padding:32px 22px}
+  section{padding-block:64px}
+  .navlinks{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<style>body{margin:0}img{max-width:100%}</style>
+</head>
+<body>
+
+
+<header class="hero">
+  <div class="wrap">
+    <nav class="nav" aria-label="Main">
+      <div class="brand">
+        <svg width="38" height="38" viewBox="0 0 480 480" aria-hidden="true"><circle cx="240" cy="240" r="236" fill="#8DB33A"/><path d="M130 160 L350 160 L322 380 Q319 402 297 402 L183 402 Q161 402 158 380 Z" fill="#F6F1E4"/><rect x="122" y="146" width="236" height="26" rx="13" fill="#E6D9B8"/><path d="M318 150 C318 118 356 118 356 150 C356 118 394 118 394 150 C394 184 356 204 356 222 C356 204 318 184 318 150 Z" fill="#8DB33A"/></svg>
+        Matcha Lovers
+      </div>
+      <div class="navlinks">
+        <a class="link" href="#how">How it works</a>
+        <a class="link" href="#flavours">Flavours</a>
+        <a class="link" href="#impact">Impact</a>
+        <a class="link" href="#cafes">For cafés</a>
+      </div>
+    </nav>
+
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow" style="color:#A9CC5A">Baked in Nantes</p>
+        <h1 style="margin-top:16px">The only cup<br>you’ll <em>finish.</em></h1>
+        <p class="lead">An edible matcha cup made from Breton buckwheat and Brittany seaweed. Sip your drink, then eat the cup.</p>
+        <div class="actions">
+          <a class="btn primary" href="#flavours">Pick a flavour</a>
+          <a class="btn ghost" href="#impact">See your impact</a>
+        </div>
+      </div>
+      <div class="cup-stage" id="stage">
+        <button type="button" id="biteBtn" aria-label="Take a bite of the cup">
+          <svg viewBox="0 0 520 560" role="img" aria-label="A cream matcha cup">
+            <ellipse cx="260" cy="530" rx="190" ry="18" fill="#0F2218"/>
+            <g class="cup-body" style="transform-origin:260px 520px">
+              <path d="M90 130 L430 130 L388 486 Q384 516 354 516 L166 516 Q136 516 132 486 Z" fill="#F6F1E4"/>
+              <path d="M120 200 L400 200 L396 236 L124 236 Z" fill="#E6D9B8"/>
+              <path d="M140 380 L380 380 L377 404 L143 404 Z" fill="#E6D9B8"/>
+              <ellipse cx="260" cy="130" rx="170" ry="34" fill="#E6D9B8"/>
+              <ellipse cx="260" cy="134" rx="150" ry="26" fill="#7FA52E"/>
+              <path d="M260 150 C252 138 236 138 236 128 C236 118 250 116 260 126 C270 116 284 118 284 128 C284 138 268 138 260 150 Z" fill="#DCE9B8"/>
+              <path id="biteMark" d="M368 112 C368 76 414 76 414 112 C414 76 460 76 460 112 C460 152 414 176 414 196 C414 176 368 152 368 112 Z" fill="#1F3B2D"/>
+            </g>
+            <circle class="crumb" cx="440" cy="170" r="7" fill="#E6D9B8" style="--dx:40px;--dy:120px"/>
+            <circle class="crumb" cx="430" cy="160" r="5" fill="#E6D9B8" style="--dx:70px;--dy:60px"/>
+            <circle class="crumb" cx="420" cy="175" r="6" fill="#E6D9B8" style="--dx:20px;--dy:170px"/>
+            <circle class="crumb" cx="450" cy="150" r="4" fill="#E6D9B8" style="--dx:90px;--dy:140px"/>
+          </svg>
+        </button>
+        <span class="crunch" aria-hidden="true">CRUNCH!</span>
+        <p class="bite-hint" id="hint">Tap the cup to take a bite</p>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><b>4 hours</b><span>of crunch, hot or iced</span></div>
+      <div class="stat"><b>0 waste</b><span>eat it, or compost it at home</span></div>
+      <div class="stat"><b>3 flavours</b><span>Classic, Caramel, Strawberry</span></div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section id="how">
+    <div class="wrap">
+      <p class="eyebrow">How it works</p>
+      <h2>Sip it. Bite it. Love it.</h2>
+      <p class="intro">Every Matcha Lovers cup is a biscuit shaped like a cup. It holds your drink, then it becomes your snack.</p>
+      <div class="how-grid">
+        <div class="step"><span class="verb">Sip</span><p>Order your matcha latte, hot or iced, in a crisp matcha cup.</p></div>
+        <div class="step"><span class="verb">Bite</span><p>When the drink is gone, eat the cup like a crunchy biscuit.</p></div>
+        <div class="step"><span class="verb">Love</span><p>Nothing goes in the bin. Not hungry? It composts at home in 30 days.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="flavours" style="padding-top:0">
+    <div class="wrap">
+      <p class="eyebrow">Flavours</p>
+      <h2>Three cups, three moods</h2>
+      <div class="flav">
+        <div class="flav-cup">
+          <svg viewBox="0 0 520 560" role="img" aria-label="The cup in the selected flavour">
+            <path class="fill" id="fCup" d="M90 130 L430 130 L388 486 Q384 516 354 516 L166 516 Q136 516 132 486 Z" fill="#DCE9B8"/>
+            <path class="fill" id="fBand1" d="M120 200 L400 200 L396 236 L124 236 Z" fill="#B9D27D"/>
+            <path class="fill" id="fBand2" d="M140 380 L380 380 L377 404 L143 404 Z" fill="#B9D27D"/>
+            <ellipse cx="260" cy="130" rx="170" ry="34" fill="#E6D9B8"/>
+            <ellipse cx="260" cy="134" rx="150" ry="26" fill="#7FA52E"/>
+          </svg>
+        </div>
+        <div>
+          <div class="tabs" role="group" aria-label="Choose a flavour">
+            <button class="tab" type="button" data-f="0" aria-pressed="true">Classic Matcha</button>
+            <button class="tab" type="button" data-f="1" aria-pressed="false">Salted Butter Caramel</button>
+            <button class="tab" type="button" data-f="2" aria-pressed="false">Strawberry</button>
+          </div>
+          <p class="flav-name" id="fName">Classic Matcha</p>
+          <p class="flav-desc" id="fDesc">Pure ceremonial matcha folded into toasted buckwheat. Grassy, nutty and gently sweet.</p>
+          <p class="pairing" id="fPair"><b>Best with:</b> an iced matcha latte.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="region" id="region">
+    <div class="wrap">
+      <p class="eyebrow">From our region</p>
+      <h2>Made with Brittany, baked in Nantes</h2>
+      <div class="ingredients">
+        <div class="ing">
+          <div class="dot" style="background:#E6D9B8"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#5E4A1E" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 22V8M12 8c0-3 2-5 5-6-1 3-2 5-5 6zM12 12c0-3-2-5-5-6 1 3 2 5 5 6zM12 16c0-3 2-5 5-6-1 3-2 5-5 6z"/></svg></div>
+          <h3>Breton buckwheat</h3>
+          <p>The flour behind our famous galettes gives the cup its toasted taste and its crunch. Naturally gluten-free.</p>
+        </div>
+        <div class="ing">
+          <div class="dot" style="background:#CFE3B4"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2F5A1E" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 18c3-2 3-6 6-6s3 4 6 4 3-4 6-6M3 12c3-2 3-6 6-6s3 4 6 4 3-4 6-6"/></svg></div>
+          <h3>Brittany seaweed</h3>
+          <p>Harvested on our coast, it makes the cup strong and keeps our straws firm until the last sip.</p>
+        </div>
+        <div class="ing">
+          <div class="dot" style="background:#BFD6C4"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1F3B2D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></div>
+          <h3>A short supply chain</h3>
+          <p>Our ingredients travel a few dozen kilometres, not across oceans. Less transport, more local jobs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="innovation">
+    <div class="wrap">
+      <p class="eyebrow">Innovation</p>
+      <h2>What makes our cup different</h2>
+      <div class="inno">
+        <div class="card"><div class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div><div><h3>Crunch-Lock coating</h3><p>A thin natural plant layer inside the cup keeps it crisp for four hours, even with a hot drink.</p></div></div>
+        <div class="card"><div class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 4c0 4-4 4-4 8M14 4c0 4-4 4-4 8M20 4c0 4-4 4-4 8"/><path d="M3 15h18l-2 6H5z"/></svg></div><div><h3>Edible straws</h3><p>Made from seaweed and rice. They stay firm in your drink instead of going soggy like paper.</p></div></div>
+        <div class="card"><div class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M21 14v7h-7"/></svg></div><div><h3>Edible-ink QR code</h3><p>Scan the cup to see where every ingredient comes from.</p></div></div>
+        <div class="card"><div class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg></div><div><h3>The Matcha Lovers app</h3><p>Every cup you eat earns points for free drinks, and a counter of the cups you kept out of the bin.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="impact" style="padding-top:0">
+    <div class="wrap">
+      <div class="calc">
+        <div>
+          <p class="eyebrow">Your impact</p>
+          <h2>How many cups would you save?</h2>
+          <label for="cups">Drinks to take away per week: <span id="cupsVal">5</span></label>
+          <input type="range" id="cups" min="1" max="21" value="5">
+        </div>
+        <div class="calc-out" aria-live="polite">
+          <span class="big" id="yearOut">260</span>
+          <p><strong>disposable cups kept out of the bin every year</strong>, just by you.</p>
+          <p>If your whole class of <strong>30</strong> did the same: <strong id="classOut">7,800</strong> cups a year.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cafes" style="padding-top:0">
+    <div class="wrap">
+      <p class="eyebrow">For coffee shops</p>
+      <h2>Serve the cup people talk about</h2>
+      <p class="intro">We sell to cafés, bubble tea bars and festivals in boxes of 100. Your customers get a surprise; you get zero cup waste.</p>
+      <div class="biz">
+        <div class="price"><b>€0.90</b><span>per cup, delivered</span></div>
+        <div class="price"><b>€90</b><span>per box of 100 cups</span></div>
+        <div class="price hl"><b>1st cup free</b><span>for your customers at launch, on us</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" style="padding-top:0">
+    <div class="wrap">
+      <p class="eyebrow">Questions</p>
+      <h2>Good to know</h2>
+      <div class="faq">
+        <details><summary>Does the cup leak or go soft?</summary><p>No. The Crunch-Lock coating keeps the cup sealed and crispy for four hours, with hot or cold drinks.</p></details>
+        <details><summary>What if I don’t want to eat it?</summary><p>That’s fine. The cup is made only of food ingredients, so it composts at home in about 30 days.</p></details>
+        <details><summary>Is it gluten-free?</summary><p>Buckwheat is naturally gluten-free. As a student project we have not certified it yet, so people with coeliac disease should wait for the official label.</p></details>
+        <details><summary>Where can I find it?</summary><p>Our goal for year one is 200 partner coffee shops in France, then Europe, Japan, South Korea and the USA.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section id="team" style="padding-top:0">
+    <div class="wrap">
+      <p class="eyebrow">The team</p>
+      <h2>Three founders, one cup</h2>
+      <div class="team">
+        <div class="member"><i>A</i>Alexis</div>
+        <div class="member"><i>S</i>Simon</div>
+        <div class="member"><i>M</i>Maxence</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap row">
+    <p class="slogan">Sip it. Bite it. Love it.</p>
+    <p>Matcha Lovers is a student project for a Dragons’ Den pitch, 2026. Product, prices and app are concepts.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var stage=document.getElementById('stage'), hint=document.getElementById('hint');
+  document.getElementById('biteBtn').addEventListener('click',function(){
+    stage.classList.remove('bitten'); void stage.offsetWidth; stage.classList.add('bitten');
+    hint.textContent='The bite is a heart. That’s why we’re Matcha Lovers.';
+  });
+
+  var F=[
+    {n:'Classic Matcha',d:'Pure ceremonial matcha folded into toasted buckwheat. Grassy, nutty and gently sweet.',p:'an iced matcha latte.',c:'#DCE9B8',b:'#B9D27D'},
+    {n:'Salted Butter Caramel',d:'Our Breton touch: matcha with a swirl of salted butter caramel from Brittany.',p:'a hot matcha latte on a cold day.',c:'#EBD3A6',b:'#C99B5A'},
+    {n:'Strawberry',d:'Matcha and freeze-dried strawberry for a fresh, fruity, pink-flecked bite.',p:'an iced matcha with oat milk.',c:'#F2D3D3',b:'#D98C8C'}
+  ];
+  var tabs=document.querySelectorAll('.tab');
+  tabs.forEach(function(t){t.addEventListener('click',function(){
+    var f=F[+t.dataset.f];
+    tabs.forEach(function(x){x.setAttribute('aria-pressed',x===t?'true':'false')});
+    document.getElementById('fName').textContent=f.n;
+    document.getElementById('fDesc').textContent=f.d;
+    document.getElementById('fPair').innerHTML='<b>Best with:</b> '+f.p;
+    document.getElementById('fCup').setAttribute('fill',f.c);
+    document.getElementById('fBand1').setAttribute('fill',f.b);
+    document.getElementById('fBand2').setAttribute('fill',f.b);
+  })});
+
+  var r=document.getElementById('cups'), nf=new Intl.NumberFormat('en-GB');
+  function upd(){var w=+r.value, y=w*52;
+    document.getElementById('cupsVal').textContent=w;
+    document.getElementById('yearOut').textContent=nf.format(y);
+    document.getElementById('classOut').textContent=nf.format(y*30);}
+  r.addEventListener('input',upd); upd();
+})();
+</script>
+
+</body>
+</html>
