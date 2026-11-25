@@ -220,7 +220,7 @@ footer .slogan{font:600 28px/1.1 var(--display);color:var(--on-deep)}
       <div>
         <p class="eyebrow" style="color:#A9CC5A">Baked in Nantes</p>
         <h1 style="margin-top:16px">The only cup<br>you’ll <em>finish.</em></h1>
-        <p class="lead">An edible matcha cup made from Breton buckwheat and Brittany seaweed. Sip your drink, then eat the cup.</p>
+        <p class="lead">An edible matcha cup made with Breton buckwheat and seaweed. Sip your drink, then eat the cup.</p>
         <div class="actions">
           <a class="btn primary" href="#flavours">Pick a flavour</a>
           <a class="btn ghost" href="#impact">See your impact</a>
@@ -265,9 +265,9 @@ footer .slogan{font:600 28px/1.1 var(--display);color:var(--on-deep)}
       <h2>Sip it. Bite it. Love it.</h2>
       <p class="intro">Every Matcha Lovers cup is a biscuit shaped like a cup. It holds your drink, then it becomes your snack.</p>
       <div class="how-grid">
-        <div class="step"><span class="verb">Sip</span><p>Order your matcha latte, hot or iced, in a crisp matcha cup.</p></div>
+        <div class="step"><span class="verb">Sip</span><p>Order your matcha latte, hot or iced, in a crisp biscuit cup.</p></div>
         <div class="step"><span class="verb">Bite</span><p>When the drink is gone, eat the cup like a crunchy biscuit.</p></div>
-        <div class="step"><span class="verb">Love</span><p>Nothing goes in the bin. Not hungry? It composts at home in 30 days.</p></div>
+        <div class="step"><span class="verb">Love</span><p>Nothing goes in the bin: the cup is part of the treat.</p></div>
       </div>
     </div>
   </section>
@@ -276,7 +276,7 @@ footer .slogan{font:600 28px/1.1 var(--display);color:var(--on-deep)}
     <div class="wrap">
       <p class="eyebrow">Inside the cup</p>
       <h2>Watch it come to life</h2>
-      <p class="intro">Drag the slider, in either direction, or tap a step. You control the 3D model itself as it takes shape: from a ball of raw dough to a baked cup, filled with matcha, then bitten.</p>
+      <p class="intro">Drag the slider or tap a step, and watch the 3D cup take shape: from raw dough to a golden cup, filled with matcha, then bitten.</p>
       <div class="viewer">
         <div class="stepper" id="stepper" aria-label="Five steps, from the dough to the first bite">
           <div class="stepper-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="stepBar"><div class="stepper-fill" id="stepFill"></div></div>
@@ -332,22 +332,22 @@ footer .slogan{font:600 28px/1.1 var(--display);color:var(--on-deep)}
   <section class="region" id="region">
     <div class="wrap">
       <p class="eyebrow">From our region</p>
-      <h2>Made with Brittany, baked in Nantes</h2>
+      <h2>Breton ingredients, baked in Nantes</h2>
       <div class="ingredients">
         <div class="ing">
           <div class="dot" style="background:#E6D9B8"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#5E4A1E" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 22V8M12 8c0-3 2-5 5-6-1 3-2 5-5 6zM12 12c0-3-2-5-5-6 1 3 2 5 5 6zM12 16c0-3 2-5 5-6-1 3-2 5-5 6z"/></svg></div>
           <h3>Breton buckwheat</h3>
-          <p>The flour behind our famous galettes gives the cup its toasted taste and its crunch. Naturally gluten-free.</p>
+          <p>The flour of our famous galettes gives the cup its toasted flavour and its crunch.</p>
         </div>
         <div class="ing">
           <div class="dot" style="background:#CFE3B4"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2F5A1E" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 18c3-2 3-6 6-6s3 4 6 4 3-4 6-6M3 12c3-2 3-6 6-6s3 4 6 4 3-4 6-6"/></svg></div>
-          <h3>Brittany seaweed</h3>
-          <p>Harvested on our coast, it makes the cup strong and keeps our straws firm until the last sip.</p>
+          <h3>Breton seaweed</h3>
+          <p>Harvested on the Brittany coast, it makes the cup stronger and keeps our straws firm until the last sip.</p>
         </div>
         <div class="ing">
           <div class="dot" style="background:#BFD6C4"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1F3B2D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></div>
           <h3>A short supply chain</h3>
-          <p>Our ingredients travel a few dozen kilometres, not across oceans. Less transport, more local jobs.</p>
+          <p>Our ingredients come from our own region, not from across the oceans. Less transport, more local jobs.</p>
         </div>
       </div>
     </div>
@@ -372,13 +372,12 @@ footer .slogan{font:600 28px/1.1 var(--display);color:var(--on-deep)}
         <div>
           <p class="eyebrow">Your impact</p>
           <h2>How many cups would you save?</h2>
-          <label for="cups">Drinks to take away per week: <span id="cupsVal">5</span></label>
+          <label for="cups">Takeaway drinks per week: <span id="cupsVal">5</span></label>
           <input type="range" id="cups" min="1" max="21" value="5">
         </div>
         <div class="calc-out" aria-live="polite">
           <span class="big" id="yearOut">260</span>
           <p><strong>disposable cups kept out of the bin every year</strong>, just by you.</p>
-          <p>If your whole class of <strong>30</strong> did the same: <strong id="classOut">7,800</strong> cups a year.</p>
         </div>
       </div>
     </div>
@@ -403,7 +402,7 @@ footer .slogan{font:600 28px/1.1 var(--display);color:var(--on-deep)}
       <h2>Good to know</h2>
       <div class="faq">
         <details><summary>Does the cup leak or go soft?</summary><p>No. The Crunch-Lock coating keeps the cup sealed and crispy for four hours, with hot or cold drinks.</p></details>
-        <details><summary>What if I don’t want to eat it?</summary><p>That’s fine. The cup is made only of food ingredients, so it composts at home in about 30 days.</p></details>
+        <details><summary>What if I don’t want to eat it?</summary><p>That’s fine. The cup is made only of food ingredients, so it can simply go in the compost.</p></details>
         <details><summary>Is it gluten-free?</summary><p>Buckwheat is naturally gluten-free. As a student project we have not certified it yet, so people with coeliac disease should wait for the official label.</p></details>
         <details><summary>Where can I find it?</summary><p>Our goal for year one is 200 partner coffee shops in France, then Europe, Japan, South Korea and the USA.</p></details>
       </div>
@@ -458,8 +457,7 @@ footer .slogan{font:600 28px/1.1 var(--display);color:var(--on-deep)}
   var r=document.getElementById('cups'), nf=new Intl.NumberFormat('en-GB');
   function upd(){var w=+r.value, y=w*52;
     document.getElementById('cupsVal').textContent=w;
-    document.getElementById('yearOut').textContent=nf.format(y);
-    document.getElementById('classOut').textContent=nf.format(y*30);}
+    document.getElementById('yearOut').textContent=nf.format(y);}
   r.addEventListener('input',upd); upd();
 })();
 </script>
